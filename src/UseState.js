@@ -20,11 +20,6 @@ function UseState({ name }) {
                 }else{
                     setError(true);
                 }
-                if(value === SECURITY_CODE){
-                    setError(false);
-                }else{
-                    setError(true);
-                }
                 setLoading(false)
 
                 console.log("Validación terminada, gei");
