@@ -20,7 +20,7 @@ function UseState({ name }) {
                 }else{
                     setError(true);
                 }
-                setLoading(false)
+                setLoading(false);
 
                 console.log("Validación terminada, gei");
             }, 3000);
