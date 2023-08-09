@@ -1,13 +1,25 @@
 import React from "react";
 
-function UseState({name}) {
+function UseState({ name }) {
 
     const [error, setError] = React.useState(true);
     const [loading, setLoading] = React.useState(false);
 
-    React.useEffect( () =>{
+    React.useEffect(() => {
         console.log("starting effect");
-    }, []);
+
+        if (!!loading) {
+            setTimeout(() => {
+                console.log("Validando gei");
+
+                setLoading(false);
+
+                console.log("Validación terminada, gei");
+            }, 3000);
+        }
+
+        console.log("ending effect");
+    }, [loading]);
 
     return (
         <div>
@@ -22,12 +34,12 @@ function UseState({name}) {
                 <p>cargando...</p>
             )}
 
-            <input placeholder="Código de Seguridad"/>
-            <button onClick={()=>{
+            <input placeholder="Código de Seguridad" />
+            <button onClick={() => {
                 setLoading(true)
             }}>Comprobar</button>
         </div>
     );
 }
 
-export {UseState};
+export { UseState };
