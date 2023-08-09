@@ -20,13 +20,16 @@ function UseState({ name }) {
                 }else{
                     setError(true);
                 }
+                if(value === SECURITY_CODE){
+                    setError(false);
+                }else{
+                    setError(true);
+                }
                 setLoading(false)
 
                 console.log("Validación terminada, gei");
             }, 3000);
         }
-
-        console.log("ending effect");
     }, [loading]);
 
     return (
@@ -35,7 +38,7 @@ function UseState({ name }) {
 
             <p>Por favor, escribe el código de seguridad</p>
 
-            {error && (
+            {(error && !loading) && (
                 <p>Error: el código es incorrecto</p>
             )}
             {loading && (
@@ -46,10 +49,12 @@ function UseState({ name }) {
                 placeholder="Código de Seguridad"
                 value={value}
                 onChange={(event)=>{
+                    /* setError(false); */
                     setValue(event.target.value);
                 }}
-             />
+            />
             <button onClick={() => {
+                /* setError(false) */
                 setLoading(true)
             }}>Comprobar</button>
         </div>
