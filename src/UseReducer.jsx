@@ -12,32 +12,42 @@ function UseReducer({ name }) {
         confirmed: false,
     };
 
+    /* actionTypes */
+    const actionTypes = {
+        CONFIRM: 'CONFIRM',
+        ERROR: 'ERROR',
+        WRITE: 'WRITE',
+        CHECK: 'CHECK',
+        DELETE: 'DELETE',
+        RESET: 'RESET',
+    };
+
     //Con objetos (la favorita del pendejo de juan y tiene razón en que es más limpia)
     const reducerObject = (state, payload) => ({
-        'CONFIRM': {
+        [actionTypes.CONFIRM]: {
             ...state,
             error: false,
             loading: false,
             confirmed: true,
         },
-        'ERROR': {
+        [actionTypes.ERROR]: {
             ...state,
             error: true,
             loading: false,
         },
-        'WRITE': {
+        [actionTypes.WRITE]: {
             ...state,
             value: payload
         },
-        'CHECK': {
+        [actionTypes.CHECK]: {
             ...state,
             loading: true,
         },
-        'DELETE': {
+        [actionTypes.DELETE]: {
             ...state,
             deleted: true,
         },
-        'RESET': {
+        [actionTypes.RESET]: {
             ...state,
             confirmed: false,
             deleted: false,
@@ -56,15 +66,26 @@ function UseReducer({ name }) {
 
     const [state, dispatch] = React.useReducer(reducer, initialState)
 
+    /* Action creators */
+    const onConfirm = () => dispatch({ type: actionTypes.CONFIRM });
+    const onError = () => dispatch({ type: actionTypes.ERROR });
+    const onCheck = () => dispatch({ type: actionTypes.CHECK });
+    const onDelete = () => dispatch({ type: actionTypes.DELETE });
+    const onReset = () => dispatch({ type: actionTypes.RESET });
+
+    const onWrite = (event) =>{
+        dispatch({ type: actionTypes.WRITE, payload: event.target.value });
+    };
+
     React.useEffect(() => {
 
         if (!!state.loading) {
             setTimeout(() => {
 
                 if (state.value === SECURITY_CODE) {
-                    dispatch({ type: 'CONFIRM' });
+                    onConfirm();
                 } else {
-                    dispatch({ type: 'ERROR' });
+                    onError();
                 }
 
             }, 3000);
@@ -88,19 +109,14 @@ function UseReducer({ name }) {
                 <input
                     placeholder="Código de Seguridad"
                     value={state.value}
-                    onChange={(event) => {
-                        /* setError(false); */
-                        dispatch({
-                            type: 'WRITE', payload: event.target.value
-                        });
-                        /* onWrite(event); */
-                    }}
+                    /* onChange={(event) => {
+                        onWrite(event.target.value);
+                    }} */
+                    onChange={onWrite}
                 />
                 <button onClick={() => {
                     /* setError(false) */
-                    dispatch({
-                        type: 'CHECK'
-                    });
+                    onCheck();
                     /* onCheck(); */
                 }}>Comprobar</button>
             </div>
@@ -111,20 +127,12 @@ function UseReducer({ name }) {
             <React.Fragment>
                 <p>¿Seguro que quiere eliminar {name}</p>
                 <button
-                    onClick={() => {
-                        dispatch({
-                            type: 'DELETE'
-                        });
-                    }}
+                    onClick={onDelete}
                 >
                     Si, eliminar
                 </button>
                 <button
-                    onClick={() => {
-                        dispatch({
-                            type: 'RESET'
-                        });
-                    }}
+                    onClick={onReset}
                 >
                     No, cancelar
                 </button>
@@ -136,11 +144,7 @@ function UseReducer({ name }) {
             <React.Fragment>
                 <p>eliminado con éxito</p>
                 <button
-                    onClick={() => {
-                        dispatch({
-                            type: 'RESET'
-                        });
-                    }}
+                    onClick={onReset}
                 >
                     Deshacer
                 </button>
